@@ -3,7 +3,20 @@ from ctypes import *
 import cv2
 import scipy.misc as misc
 #dirlib = cdll.LoadLibrary('./cpp/build/libDirection.dylib')
-dirlib = cdll.LoadLibrary('./cpp/build/libDirection.so')
+# py >= 3.8
+# import os
+# https://github.com/stlehmann/pyads/issues/105
+# os.add_dll_directory("E:\\Users\\zichu\\PycharmProjects\\FrameNet\\src\\demo\\cpp\\x64\\Release")
+# os.add_dll_directory(r"E:\opencv\opencv-4.1.1\opencv\build\x64\vc15\lib")
+# os.add_dll_directory(r"E:\opencv\opencv-4.1.1\opencv\build\x64\vc15\bin")
+import sys
+import os
+if sys.platform == 'win32':
+	# dependency
+    opencvdll = windll.LoadLibrary(r'E:\opencv\opencv-4.1.1\opencv\build\x64\vc15\bin\opencv_world411.dll')
+    dirlib = windll.LoadLibrary(r'E:\\Users\\zichu\\PycharmProjects\\FrameNet\\src\\demo\\cpp\\x64\\Release\\Direction.dll')
+else:
+    dirlib = cdll.LoadLibrary('./cpp/build/libDirection.so')
 
 def Color2Vec(image):
 	image = image / 255.0 * 2.0 - 1.0
