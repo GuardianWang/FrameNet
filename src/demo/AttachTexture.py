@@ -4,7 +4,6 @@ import sys
 import numpy as np
 from visualizer import app
 from direction import *
-import scipy.misc as misc
 import argparse
 
 parser = argparse.ArgumentParser(description='Process saome integers.')
@@ -25,8 +24,8 @@ else:
 	mesh_info = ProcessOBJ('resources/objects/toymonkey/toymonkey.obj','resources/objects/toymonkey/toymonkey.jpg')
 
 color_image = cv2.imread(color_name)
-dirX_3d = Color2Vec(misc.imresize(sio.imread(orient_x_name), (480,640), 'nearest'))
-dirY_3d = Color2Vec(misc.imresize(sio.imread(orient_y_name), (480,640), 'nearest'))
+dirX_3d = Color2Vec(cv2.resize(sio.imread(orient_x_name), (480,640), cv2.INTER_NEAREST))
+dirY_3d = Color2Vec(cv2.resize(sio.imread(orient_y_name), (480,640), cv2.INTER_NEAREST))
 
 if args.resource[-3:] != 'obj':
 	resource_image = cv2.imread(args.resource)
@@ -43,6 +42,6 @@ min_v = np.min([resource_image.shape[0], resource_image.shape[1]])
 start_x = (resource_image.shape[1] - min_v)//2
 start_y = (resource_image.shape[0] - min_v)//2
 attached_patch = np.ascontiguousarray(resource_image[start_y:start_y+min_v, start_x:start_x+min_v,:])
-attached_patch = misc.imresize(attached_patch, (401,401),'nearest')
+attached_patch = cv2.resize(attached_patch, (401,401),cv2.INTER_NEAREST)
 
 app(color_image, dirX_3d, dirY_3d, attached_patch, intrinsics, mesh_info)
