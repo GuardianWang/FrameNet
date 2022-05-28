@@ -2,6 +2,26 @@
 
 ![FrameNet AR Teaser](https://github.com/hjwdzh/framenet/raw/master/img/teaser-ar.jpg)
 
+### Environment
+
+`python < 3.8`
+```
+opencv-python
+scikit-image
+scipy
+```
+
+### Build the cpp library with Visual Studio
+
+1. Create project from existing code
+2. Project properties
+  - general -> configuration type, dynamic library
+  - VC++ Directories -> Include directories, add glm and opencv
+  - VC++ Directories -> Library directories, add opencv
+  - Linker -> Input -> Additional Dependencies, add `opencv_world411.lib`
+3. build
+4. In `direction.py`, change dll paths
+
 ### Build the cpp library
 ```
 cd cpp
@@ -32,3 +52,4 @@ python AttachTexture.py [--input scene] [--resource object]
   * Attach pattern in deformable mode.
   * Attach a 3D object.
 * Press 'r' to rotate the object among 4 possible orientations.
+* Press 's' to save a screenshot.
