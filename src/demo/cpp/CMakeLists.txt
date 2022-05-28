@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.1)
 project(Direction)
 
+set(OpenCV_DIR "E:/opencv/opencv-4.1.1/opencv/build")
+set(OpenCV_LIB_PATH "E:/opencv/opencv-4.1.1/opencv/build/x64/vc15/lib")
+find_package(OpenCV REQUIRED)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -33,4 +36,5 @@ add_library(
 target_link_libraries(
     Direction
     opencv_world
+    ${OpenCV_LIBS}
 )
