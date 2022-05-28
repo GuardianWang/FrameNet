@@ -1,9 +1,4 @@
-#include <opencv2/opencv.hpp>
-#include <glm/glm.hpp>
-#define MIN(a,b) (((a)<(b))?(a):(b))
-#define MAX(a,b) (((a)>(b))?(a):(b))
-
-extern "C" {
+#include "direction.h"
 
 void VisualizeDirection(const char* output_file, float* color, cv::Point2f* Qx, cv::Point2f* Qy, int height, int width) {
 	cv::Mat final(height, width, CV_32FC3);
@@ -256,14 +251,16 @@ float calculateSignedArea2(const glm::vec3& a, const glm::vec3& b, const glm::ve
 	return ((c.x - a.x) * (b.y - a.y) - (b.x - a.x) * (c.y - a.y));
 }
 
-glm::vec3 calculateBarycentricCoordinate(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c, const glm::vec3& p) {
+void calculateBarycentricCoordinate(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c, const glm::vec3& p, glm::vec3& bary) {
 	float beta_tri = calculateSignedArea2(a, p, c);
 	float gamma_tri = calculateSignedArea2(a, b, p);
 	float tri_inv = 1.0f / calculateSignedArea2(a, b, c);
 	float beta = beta_tri * tri_inv;
 	float gamma = gamma_tri * tri_inv;
 	float alpha = 1.0 - beta - gamma;
-	return glm::vec3(alpha, beta, gamma);
+	bary.x = alpha;
+	bary.y = beta;
+	bary.z = gamma;
 }
 
 bool isBarycentricCoordInBounds(const glm::vec3 barycentricCoord) {
@@ -322,7 +319,8 @@ void DrawTriangle(glm::vec3* v1, glm::vec3* v2, glm::vec3* v3,
 
 			float x = (px - cx) / fx;
 			float y = (py - cy) / fy;
-			glm::vec3 baryCentricCoordinate = calculateBarycentricCoordinate(p1, p2, p3, glm::vec3(x, y, 0));
+			glm::vec3 baryCentricCoordinate; 
+			calculateBarycentricCoordinate(p1, p2, p3, glm::vec3(x, y, 0), baryCentricCoordinate);
 
 			if (isBarycentricCoordInBounds(baryCentricCoordinate)) {
 				int pixel = py * width + px;
@@ -371,4 +369,3 @@ void DrawTriangle(glm::vec3* v1, glm::vec3* v2, glm::vec3* v3,
 			}
 		}
 	}}
-};
